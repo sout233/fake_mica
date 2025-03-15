@@ -1,0 +1,15 @@
+[package]
+name = "fake_mica"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.97"
+image = "0.25.5"
+imageproc = "0.25.0"
+kmeans_colors = "0.6.0"
+noise = "0.9.0"
+palette = "0.7.6"
+rand = "0.9.0"
+softbuffer = "0.4.6"
+wallpaper = "3.2.0"
