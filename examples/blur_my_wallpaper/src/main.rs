@@ -1,5 +1,4 @@
-mod blur;
-mod colors;
+use fake_mica::blur;
 
 fn main() {
     let wallpaper = wallpaper::get().unwrap();

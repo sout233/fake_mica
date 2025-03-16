@@ -1,0 +1,9 @@
+[package]
+name = "blur_my_wallpaper"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wallpaper = { workspace = true }
+image = { workspace = true }
+fake_mica = { workspace = true }

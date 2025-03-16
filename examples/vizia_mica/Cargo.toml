@@ -1,0 +1,10 @@
+[package]
+name = "vizia_mica"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+vizia = { git = "https://github.com/vizia/vizia" }
+fake_mica = { workspace = true }
+wallpaper = { workspace = true }
+image = { workspace = true }

@@ -2,16 +2,33 @@
 name = "fake_mica"
 version = "0.1.0"
 edition = "2021"
+description = "A library for generating fake mica effects"
+authors = ["sout233"]
+license = "MIT"
+repository = "https://github.com/sout233/fake_mica"
+keywords = ["mica", "effect", "blur", "wallpaper"]
+categories = ["rendering", "graphics"]
 
-[dependencies]
+[lib]
+name = "fake_mica"
+path = "src/lib.rs"
+
+[workspace]
+members = ["examples/blur_my_wallpaper", "examples/vizia_mica"]
+
+[workspace.dependencies]
+fake_mica = { path = "." }
 anyhow = "1.0.97"
 image = "0.25.5"
+wallpaper = "3.2.0"
+
+[dependencies]
 imageproc = "0.25.0"
 kmeans_colors = "0.6.0"
 noise = "0.9.0"
 palette = "0.7.6"
 rand = "0.9.0"
 softbuffer = "0.4.6"
-wallpaper = "3.2.0"
 fastblur = { git = "https://github.com/fschutt/fastblur" }
 rayon = "1.10.0"
+image = {workspace = true}
