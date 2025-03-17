@@ -108,7 +108,15 @@ impl Model for AppData {
                     }
                 }
             }
-        })
+        });
+        event.map(|window_event, _| match window_event {
+            WindowEvent::WindowMoved(pos) => {
+                println!("Window moved to: {:?}", pos);
+            }
+            WindowEvent::WindowFocused(_) => {
+            }
+            _ => (),
+        });
     }
 }
 
