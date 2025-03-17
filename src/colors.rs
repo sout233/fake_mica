@@ -11,7 +11,6 @@ impl MicaColors {
     }
 }
 
-
 // fn extract_mica_colors(img_path: &str) -> anyhow::Result<MicaColors> {
 //     let img = image::open(img_path)?.into_rgb8();
 //     let pixels: Vec<[f32; 3]> = img.pixels()
@@ -50,7 +49,7 @@ pub fn mix_colors(color1: [u8; 3], color2: [u8; 3], factor: f32) -> [u8; 3] {
     };
 
     let normal_blend = |base: u8, blend: u8| {
-        ((base as f32) * 0.3 + (blend as f32) * 0.7) as u8 // 70% 透明度的叠加
+        ((base as f32) * (1.0 - factor) + (blend as f32) * factor) as u8 // 叠加
     };
 
     let overlay_result = [

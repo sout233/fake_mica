@@ -3,23 +3,25 @@ use std::{io::Cursor, sync::Arc};
 use image::{DynamicImage, GenericImageView, ImageFormat};
 use vizia::{
     prelude::*,
-    vg::{self, Data, Point},
+    vg::{self, font_style::Width, Data, Point},
 };
 
 fn main() -> Result<(), ApplicationError> {
     let wallpaper_path = wallpaper::get().unwrap();
     let wallpaper = image::open(&wallpaper_path).unwrap();
-    let blurred_wallpaper = fake_mica::blur::blur_image(wallpaper.clone(), [255, 255, 255], 200.0);
+    let blurred_wallpaper =
+        fake_mica::blur::blur_image(wallpaper.clone(), [255, 255, 255], 200.0, 1.0);
     let wallpaper = Arc::new(blurred_wallpaper); // 共享壁纸数据
 
     let initial_rect = (0, 0, 800, 450);
-    let initial_bg = crop_wallpaper(&wallpaper, initial_rect);
+    let initial_bg = crop_wallpaper(&wallpaper, initial_rect, 1.0);
 
     Application::new(move |cx| {
         AppData {
             bg_data: initial_bg,
             wallpaper: wallpaper.clone(),
             last_window_position: (0, 0),
+            scale_factor: cx.scale_factor(),
         }
         .build(cx);
 
@@ -81,6 +83,7 @@ struct AppData {
     bg_data: Vec<u8>,
     wallpaper: Arc<DynamicImage>,
     last_window_position: (i32, i32),
+    scale_factor: f32,
 }
 
 impl Model for AppData {
@@ -89,9 +92,26 @@ impl Model for AppData {
             AppEvent::UpdateBackground(position) => {
                 let (x, y) = *position;
                 let window_size = cx.window().unwrap().inner_size();
+                let scale_factor = cx.scale_factor();
+
+                if scale_factor != self.scale_factor {
+                    println!("Scale factor changed: {}", scale_factor);
+                    self.scale_factor = scale_factor;
+                    let wallpaper_path = wallpaper::get().unwrap();
+                    let wallpaper = image::open(&wallpaper_path).unwrap();
+                    let blurred_wallpaper = fake_mica::blur::blur_image(
+                        wallpaper.clone(),
+                        [255, 255, 255],
+                        200.0,
+                        scale_factor,
+                    );
+                    self.wallpaper = Arc::new(blurred_wallpaper); // 共享壁纸数据
+                }
+
                 self.bg_data = crop_wallpaper(
                     &self.wallpaper,
                     (x, y, window_size.width, window_size.height),
+                    cx.scale_factor(),
                 );
                 cx.needs_redraw();
             }
@@ -113,8 +133,7 @@ impl Model for AppData {
             WindowEvent::WindowMoved(pos) => {
                 println!("Window moved to: {:?}", pos);
             }
-            WindowEvent::WindowFocused(_) => {
-            }
+            WindowEvent::WindowFocused(_) => {}
             _ => (),
         });
     }
@@ -126,15 +145,18 @@ pub enum AppEvent {
 }
 
 /// 截取壁纸的相应区域
-fn crop_wallpaper(image: &DynamicImage, rect: (i32, i32, u32, u32)) -> Vec<u8> {
-    println!("Cropping wallpaper: ({}, {}, {}, {})", rect.0, rect.1, rect.2, rect.3);
+fn crop_wallpaper(image: &DynamicImage, rect: (i32, i32, u32, u32), scale_factor: f32) -> Vec<u8> {
+    println!(
+        "Cropping wallpaper: ({}, {}, {}, {})",
+        rect.0, rect.1, rect.2, rect.3
+    );
     let (x, y, width, height) = rect;
 
     // let img_width = image.width();
     // let img_height = image.height();
     let resolution = resolution::current_resolution().unwrap();
-    let img_width = resolution.0 as u32;
-    let img_height = resolution.1 as u32;
+    let img_width = resolution.0 as u32 * 2;
+    let img_height = resolution.1 as u32 * 2;
 
     // 确保裁剪范围不超出壁纸
     let crop_x = x.max(0) as u32;
