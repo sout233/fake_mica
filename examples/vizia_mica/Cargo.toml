@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-vizia = { git = "https://github.com/vizia/vizia" }
+vizia = { git = "https://github.com/vizia/vizia", rev = "fd291e7b0c459387d69e056531fdb3b932ce7c12" }
 fake_mica = { workspace = true }
 wallpaper = { workspace = true }
 image = { workspace = true }

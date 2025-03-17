@@ -21,6 +21,7 @@ fake_mica = { path = "." }
 anyhow = "1.0.97"
 image = "0.25.5"
 wallpaper = "3.2.0"
+resolution = "0.2.0"
 
 [dependencies]
 imageproc = "0.25.0"
@@ -32,4 +33,4 @@ softbuffer = "0.4.6"
 fastblur = { git = "https://github.com/fschutt/fastblur" }
 rayon = "1.10.0"
 image = {workspace = true}
-resolution = "0.2.0"
+resolution = {workspace = true}
