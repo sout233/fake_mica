@@ -122,8 +122,11 @@ fn crop_wallpaper(image: &DynamicImage, rect: (i32, i32, u32, u32)) -> Vec<u8> {
     println!("Cropping wallpaper: ({}, {}, {}, {})", rect.0, rect.1, rect.2, rect.3);
     let (x, y, width, height) = rect;
 
-    let img_width = image.width();
-    let img_height = image.height();
+    // let img_width = image.width();
+    // let img_height = image.height();
+    let resolution = resolution::current_resolution().unwrap();
+    let img_width = resolution.0 as u32;
+    let img_height = resolution.1 as u32;
 
     // 确保裁剪范围不超出壁纸
     let crop_x = x.max(0) as u32;

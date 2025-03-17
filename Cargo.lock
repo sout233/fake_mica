@@ -4083,6 +4083,7 @@ version = "0.1.0"
 dependencies = [
  "fake_mica",
  "image 0.25.5",
+ "resolution",
  "vizia",
  "wallpaper",
 ]

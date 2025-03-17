@@ -8,3 +8,4 @@ vizia = { git = "https://github.com/vizia/vizia", rev = "fd291e7b0c459387d69e056
 fake_mica = { workspace = true }
 wallpaper = { workspace = true }
 image = { workspace = true }
+resolution = { workspace = true }
