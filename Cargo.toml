@@ -32,3 +32,4 @@ softbuffer = "0.4.6"
 fastblur = { git = "https://github.com/fschutt/fastblur" }
 rayon = "1.10.0"
 image = {workspace = true}
+resolution = "0.2.0"

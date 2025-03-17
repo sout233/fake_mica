@@ -5,7 +5,11 @@ use rayon::iter::{IntoParallelRefMutIterator, ParallelIterator};
 use crate::colors::mix_colors;
 
 pub fn blur_image(image: DynamicImage, color: [u8; 3], sigma: f32) -> DynamicImage {
-    let image = image.resize_exact(1920, 1080, image::imageops::FilterType::Nearest);
+    let resolution = resolution::current_resolution().unwrap();
+    let res_w = resolution.0 as u32;
+    let res_h = resolution.1 as u32;
+
+    let image = image.resize_exact(res_w, res_h, image::imageops::FilterType::Nearest);
 
     let mut data: Vec<[u8; 3]> = image
         .pixels()
@@ -25,8 +29,8 @@ pub fn blur_image(image: DynamicImage, color: [u8; 3], sigma: f32) -> DynamicIma
         .for_each(|p| *p = mix_colors(*p, color, factor));
 
     let blurred_image: image::ImageBuffer<image::Rgb<u8>, Vec<u8>> =
-        image::ImageBuffer::from_fn(1920, 1080, |x, y| {
-            let pixel = data[y as usize * 1920 + x as usize];
+        image::ImageBuffer::from_fn(res_w, res_h, |x, y| {
+            let pixel = data[(y * res_w + x) as usize];
             image::Rgb([pixel[0], pixel[1], pixel[2]])
         });
 
